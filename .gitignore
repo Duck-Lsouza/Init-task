@@ -1,0 +1,19 @@
+
+cat <<EOF > .gitignore
+*.o
+*.out
+*.exe
+obj/
+bin/
+
+
+init-task
+
+
+.DS_Store
+.vscode/
+.idea/
+
+data/*
+!data/.keep
+EOF
