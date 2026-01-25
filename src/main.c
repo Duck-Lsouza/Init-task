@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
+#include "portabilidade.h"
 
 void menu_edit();
 void edit(int numero);
@@ -9,8 +9,7 @@ void erro_opcao();
 
 int main (){
 
-    printf("Testeeeeeeeeeeeeeeeeeeee");
-    system("cls");
+    limpar_tela();
     menu_edit();
 
 
@@ -78,13 +77,13 @@ void edit(int numero){
 }
 void erro_opcao(){ //Função para usar para indicar que nenhuma opção foi selecionada.
 
-    system("cls");
+    limpar_tela();
 
     printf("ERRO! Nenhuma opção foi selecionada.\n");
-        Sleep(1000);
+        esperar(1000);
 
-    printf("Reiniciando...");
-        Sleep(4000);
+    printf("Reiniciando...\n");
+        esperar(1000);
 
-    system("cls");
+    limpar_tela();
     }
