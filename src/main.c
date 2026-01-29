@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
+
+
 #include "portabilidade.h"
+#include "tarefas.h"
 
 
-
-void menu_ini();
-
+void menu_ini(No** lista);
+void nova_tarefa(No** lista);
 void menu_edit();
 void edit(int numero);
 void erro_opcao();
@@ -13,15 +17,17 @@ void erro_opcao();
 
 
 int main (){
-    menu_ini();
+    
+    srand(time(NULL)); // variar o id das tarefas
+
+    No* lista = NULL;
+
+    menu_ini(&lista);
     limpar_tela();
     
-    
+    }
 
-
-}
-
-void menu_ini(){
+void menu_ini(No** lista){
     
     
     int opcao = 0;
@@ -45,7 +51,8 @@ void menu_ini(){
         
         case 1:
             //tamo criando tamo criando
-             break;
+            nova_tarefa(lista); 
+            break;
 
         case 2:
             //editar
@@ -88,6 +95,41 @@ void menu_edit(){ //menu para selecionar o que deseja editar
                
     }
 }
+
+void nova_tarefa(No** lista){
+    limpar_tela();
+
+    printf("=== Criando nova tarega ===\n");
+
+    No* novo_no = (No*) malloc(sizeof(No));
+
+    novo_no->info.id = rand() % 1000; 
+    
+    // Limpa o buffer do teclado (para o scanf não pular o titulo) 
+    //esqueci se tem outro jeito, salva o codigo ai Henrique
+    int c; while ((c = getchar()) != '\n' && c != EOF);
+
+    printf("Digite o Titulo:");
+        scanf("%49[^\n]", novo_no->info.titulo);
+    
+    
+    //valores padroes, apenas testes felas
+    novo_no->info.concluido = 0;
+    novo_no->info.prazo.dia = 1; 
+    novo_no->info.prazo.mes = 1; 
+    novo_no->info.prazo.ano = 2024;
+
+    novo_no->prox = *lista;
+
+    *lista = novo_no;
+
+    printf("\n>> Tarefa criada com sucesso! (ID: %d)\n", novo_no->info.id);
+    esperar(2000);
+}
+
+
+
+
 
 void edit(int numero){
     limpar_tela();
