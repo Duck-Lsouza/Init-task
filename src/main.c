@@ -10,9 +10,10 @@
 
 void menu_ini(No** lista);
 void nova_tarefa(No** lista);
-void menu_edit();
-void edit(int numero);
+void menu_edit(No** lista);
+void edit(int numero, No **lista);
 void erro_opcao();
+No* find(No* lista, int idzada);
 
 
 
@@ -56,7 +57,7 @@ void menu_ini(No** lista){
 
         case 2:
             //editar
-            menu_edit();
+            menu_edit(lista);
             break;
         
         case 3:
@@ -72,11 +73,10 @@ void menu_ini(No** lista){
 }
 
 
-void menu_edit(){ //menu para selecionar o que deseja editar
+void menu_edit(No** lista){ //menu para selecionar o que deseja editar
     int opcao = 1;
-
+    limpar_tela();
     while (opcao != 5){
-        limpar_tela();
         printf("==============================================\n");
         printf("\n\tSELECIONE O QUE DESEJA FAZER:\n\n");
         printf("==============================================\n");
@@ -90,7 +90,7 @@ void menu_edit(){ //menu para selecionar o que deseja editar
                 erro_opcao();
         
             }else if(opcao != 5){
-                edit(opcao);
+                edit(opcao, lista);
             }
                
     }
@@ -99,20 +99,18 @@ void menu_edit(){ //menu para selecionar o que deseja editar
 void nova_tarefa(No** lista){
     limpar_tela();
 
-    printf("=== Criando nova tarega ===\n");
+    printf("=== Criando nova tarefa ===\n");
 
     No* novo_no = (No*) malloc(sizeof(No));
-
+    
     novo_no->info.id = rand() % 1000; 
     
-    // Limpa o buffer do teclado (para o scanf não pular o titulo) 
-    //esqueci se tem outro jeito, salva o codigo ai Henrique
-    int c; while ((c = getchar()) != '\n' && c != EOF);
-
+    getchar();
     printf("Digite o Titulo:");
-        scanf("%49[^\n]", novo_no->info.titulo);
+        fgets(novo_no->info.titulo, sizeof(novo_no->info.titulo), stdin);
     
-    
+    printf("Digite a prioridade: \n(1) Urgente.\n(2) Importante.\n(3) Intermediário.\n(4) Não importante.\n");
+    scanf("%d", &novo_no->info.prioridade);
     //valores padroes, apenas testes felas
     novo_no->info.concluido = 0;
     novo_no->info.prazo.dia = 1; 
@@ -131,10 +129,17 @@ void nova_tarefa(No** lista){
 
 
 
-void edit(int numero){
+void edit(int numero, No** lista){
     limpar_tela();
-    int x;
-    printf("=============================================================");
+    int x, id_aux;
+    No *atual = *lista;
+    No *anterior = NULL;
+
+    printf("Digite o ID do item que deseja alterar: ");
+    scanf("%d", &id_aux);
+
+    printf("=============================================================\n");
+
     switch(numero){
         case 1:
             printf("Escolha a nova prioridade para o item:\n");
@@ -146,23 +151,35 @@ void edit(int numero){
                 if(x < 1 || x > 4){
                     erro_opcao();
                 }else {
-                    //variavel da prioridade = x;
-                    printf("Prioridade alterada com sucesso.");
+                    atual = find(atual, id_aux);
+                    if (atual == NULL){
+                        erro_opcao();
+                    }
+                    atual->info.prioridade = x;
+                    printf("Prioridade alterada com sucesso.\n");
                         esperar(1500);
+                        limpar_tela();
                 }   
             break;
         case 2: 
-            //if(variavel do item concluido == 0){variavel do item = 1;}else if(variavel do item concluido == 1) {variavel do item = 0;}
+            atual = find(atual, id_aux);
+            atual->info.concluido = 1;
             printf("O item foi concluido com sucesso!");
                 esperar(1500);
             break;
         case 3:
-            printf("Escolha um novo dia e horario:\n");
+            atual = find(atual, id_aux);
             printf("Escolha o dia e o mes:\n");
-            //scanf("%d", variavel do dia);
-            //scanf("%d", variavel do mes);
+            scanf("%d", &atual->info.prazo.dia);
+            scanf("%d", &atual->info.prazo.mes);
+            printf("Escolha o novo ano: ");
+            scanf("%d", &atual->info.prazo.ano);
             break;
         case 4: 
+            while (atual != NULL && atual->info.id != id_aux) {
+                anterior = atual;
+                atual = atual->prox;
+            }   
             printf("Item removido com sucesso");
                 esperar(1500);
             //variavel do nó = NULL;
@@ -182,3 +199,14 @@ void erro_opcao(){ //Função para usar para indicar que nenhuma opção foi sel
 
     limpar_tela();
     }
+
+No* find(No* lista, int idzada){
+    No* atual = lista;
+    int id_aux = idzada;
+
+     while (atual != NULL && atual->info.id != id_aux){
+            atual = atual->prox;
+    }
+
+    return atual;
+}   
