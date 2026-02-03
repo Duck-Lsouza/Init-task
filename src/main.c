@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-
 #include "portabilidade.h"
 #include "tarefas.h"
 
@@ -11,6 +9,7 @@
 void menu_ini(No** lista);
 void nova_tarefa(No** lista);
 void menu_edit(No** lista);
+void listar(No* lista);
 void edit(int numero, No **lista);
 void erro_opcao();
 No* find(No* lista, int idzada);
@@ -61,7 +60,9 @@ void menu_ini(No** lista){
             break;
         
         case 3:
-            //saboor listar tarefas
+            
+        //saboor listar tarefas
+            listar(*lista);
             break;
         
         case 4:
@@ -71,6 +72,44 @@ void menu_ini(No** lista){
 
 }
 }
+
+
+void listar(No* lista){
+    limpar_tela();
+    
+    
+    printf("=== LISTA DE TAREFAS ===\n\n");
+
+    if(lista == NULL){
+        printf("Nenhuma tarefa encontrada. O trem esta vazio!\n");
+    } else {
+        
+        // ponteiro auxiliar apontado para o inicio da lista 
+        No* aux = lista; 
+
+        
+        while(aux != NULL){
+            printf("----------------------------------------\n");
+            printf("ID: %d  |  Titulo: %s\n", aux->info.id, aux->info.titulo);
+            
+        
+    
+            printf("Prioridade: %d\n", aux->info.prioridade);
+            printf("Status: %s\n", (aux->info.concluido) ? "[X] Concluido" : "[ ] Pendente");
+            
+            
+            aux = aux->prox; 
+        }
+        printf("----------------------------------------\n");
+    }
+
+    printf("\n[Pressione Enter para voltar...]");
+    int c; while ((c = getchar()) != '\n' && c != EOF);
+    getchar();
+}
+    
+
+
 
 
 void menu_edit(No** lista){ //menu para selecionar o que deseja editar
@@ -134,7 +173,7 @@ void edit(int numero, No** lista){
     int x, id_aux;
     No *atual = *lista;
     No *anterior = NULL;
-
+    listar(lista);
     printf("Digite o ID do item que deseja alterar: ");
     scanf("%d", &id_aux);
 
@@ -142,7 +181,8 @@ void edit(int numero, No** lista){
 
     switch(numero){
         case 1:
-            printf("Escolha a nova prioridade para o item:\n");
+
+        printf("Escolha a nova prioridade para o item:\n");
             printf("(1) Urgente.\n");
             printf("(2) Importante.\n");
             printf("(3) Intermediário.\n");
