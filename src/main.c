@@ -8,8 +8,8 @@
 #include "tarefas.h"
 
 
-void menu_ini(No** lista);
-void nova_tarefa(No** lista);
+void menu_ini(No** lista, int* prox_id);
+void nova_tarefa(No** lista, int* contador_id);
 void menu_edit(No** lista);
 void listar(No* lista);
 void edit(int numero, No **lista);
@@ -20,16 +20,18 @@ No* find(No* lista, int idzada);
 
 int main (){
     
-    srand(time(NULL)); // variar o id das tarefas
+    int prox_id = 1;
 
     No* lista = NULL;
 
-    menu_ini(&lista);
+    menu_ini(&lista, &prox_id);
     limpar_tela();
     
-    }
+    return 0;
+   
+}
 
-void menu_ini(No** lista){
+void menu_ini(No** lista, int* prox_id){
     
     
     int opcao = 0;
@@ -53,7 +55,7 @@ void menu_ini(No** lista){
         
         case 1:
             //tamo criando tamo criando
-            nova_tarefa(lista); 
+            nova_tarefa(lista, prox_id); 
             break;
 
         case 2:
@@ -142,14 +144,15 @@ void menu_edit(No** lista){ //menu para selecionar o que deseja editar
 }
 // Recebe No** (ponteiro duplo) porque precisamos alterar o ENDEREÇO para onde 
 // o ponteiro 'lista' da main aponta (atualizar a cabeça da lista).
-void nova_tarefa(No** lista){
+void nova_tarefa(No** lista, int* contador_id){
     limpar_tela();
 
     printf("=== Criando nova tarefa ===\n");
 
     No* novo_no = (No*) malloc(sizeof(No));
     
-    novo_no->info.id = rand() % 1000; 
+    novo_no->info.id = (*contador_id);
+    (*contador_id)++; 
     
     getchar();
     printf("Digite o Titulo:");
