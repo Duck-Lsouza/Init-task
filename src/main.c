@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
+
 
 #include "portabilidade.h"
 #include "tarefas.h"
@@ -42,7 +44,7 @@ void menu_ini(No** lista){
         printf("(3) Listar todas as tarefas\n");
         printf("(4) Exit\n");
             scanf("%d", &opcao);  
-        
+
             if(opcao < 1 || opcao > 4) {
             erro_opcao();
         }
@@ -77,11 +79,13 @@ void menu_ini(No** lista){
 void listar(No* lista){
     limpar_tela();
     
-    
+    /*a função não altera onde a lista começa, so percorre por isso 
+    passamos uma copia do ponteiro(passagem por valor)
+*/ 
     printf("=== LISTA DE TAREFAS ===\n\n");
 
     if(lista == NULL){
-        printf("Nenhuma tarefa encontrada. O trem esta vazio!\n");
+        printf("Nenhuma tarefa encontrada\n");
     } else {
         
         // ponteiro auxiliar apontado para o inicio da lista 
@@ -104,8 +108,9 @@ void listar(No* lista){
     }
 
     printf("\n[Pressione Enter para voltar...]");
-    int c; while ((c = getchar()) != '\n' && c != EOF);
+    limpar_buffer();
     getchar();
+    
 }
     
 
@@ -116,6 +121,7 @@ void menu_edit(No** lista){ //menu para selecionar o que deseja editar
     int opcao = 1;
     limpar_tela();
     while (opcao != 5){
+        limpar_tela();
         printf("==============================================\n");
         printf("\n\tSELECIONE O QUE DESEJA FAZER:\n\n");
         printf("==============================================\n");
@@ -134,7 +140,8 @@ void menu_edit(No** lista){ //menu para selecionar o que deseja editar
                
     }
 }
-
+// Recebe No** (ponteiro duplo) porque precisamos alterar o ENDEREÇO para onde 
+// o ponteiro 'lista' da main aponta (atualizar a cabeça da lista).
 void nova_tarefa(No** lista){
     limpar_tela();
 
@@ -148,16 +155,21 @@ void nova_tarefa(No** lista){
     printf("Digite o Titulo:");
         fgets(novo_no->info.titulo, sizeof(novo_no->info.titulo), stdin);
     
+    
+    
     printf("Digite a prioridade: \n(1) Urgente.\n(2) Importante.\n(3) Intermediário.\n(4) Não importante.\n");
-    scanf("%d", &novo_no->info.prioridade);
+        scanf("%d", &novo_no->info.prioridade);
+
+
     //valores padroes, apenas testes felas
     novo_no->info.concluido = 0;
     novo_no->info.prazo.dia = 1; 
     novo_no->info.prazo.mes = 1; 
     novo_no->info.prazo.ano = 2024;
 
+    //o "prox" aponta para onde a lista original apontava
     novo_no->prox = *lista;
-
+    //a lista aponta para o novo no que ciramos
     *lista = novo_no;
 
     printf("\n>> Tarefa criada com sucesso! (ID: %d)\n", novo_no->info.id);
@@ -173,10 +185,29 @@ void edit(int numero, No** lista){
     int x, id_aux;
     No *atual = *lista;
     No *anterior = NULL;
-    listar(lista);
+  
     printf("Digite o ID do item que deseja alterar: ");
-    scanf("%d", &id_aux);
+      scanf("%d", &id_aux);
+      //validar se o id existe
 
+        atual = *lista;
+
+        //na remoção a gente precisar achar o anterior
+        if(numero == 4){
+            while ( atual != NULL && atual->info.id != id_aux){
+                anterior = atual->prox;
+            }
+        }else { 
+            //so o caso 4 precisa ser difente, os outros podemos usar o find
+            atual = find(*lista, id_aux);
+        }
+
+        if(atual == NULL){
+            printf("ERRO: ID nao encontrado:\n");
+            limpar_buffer();
+            esperar(1500);
+            return;
+        }
     printf("=============================================================\n");
 
     switch(numero){
@@ -188,24 +219,27 @@ void edit(int numero, No** lista){
             printf("(3) Intermediário.\n");
             printf("(4) Não importante.\n");
                 scanf("%d", &x);
-                if(x < 1 || x > 4){
-                    erro_opcao();
-                }else {
-                    atual = find(atual, id_aux);
-                    if (atual == NULL){
-                        erro_opcao();
-                    }
+               if(x < 1 || x> 4){
+                erro_opcao();
+                break;
+                
+               }
+                //procura se o id existe
+                atual = find(*lista, id_aux);
+                
+                    
                     atual->info.prioridade = x;
                     printf("Prioridade alterada com sucesso.\n");
                         esperar(1500);
                         limpar_tela();
-                }   
+                  
             break;
         case 2: 
             atual = find(atual, id_aux);
             atual->info.concluido = 1;
-            printf("O item foi concluido com sucesso!");
-                esperar(1500);
+            printf("O item foi concluido com sucesso!\n");
+              
+            esperar(1500);
             break;
         case 3:
             atual = find(atual, id_aux);
@@ -236,7 +270,7 @@ void erro_opcao(){ //Função para usar para indicar que nenhuma opção foi sel
 
     printf("Reiniciando...\n");
         esperar(1000);
-
+        getchar();
     limpar_tela();
     }
 

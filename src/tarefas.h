@@ -19,3 +19,12 @@ typedef struct No{
     
 }No;
 
+//funções utei
+
+
+// Limpa o buffer de entrada (stdin).
+// Usa 'int' para tratar corretamente o EOF que getchar() pode retornar.
+void limpar_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
