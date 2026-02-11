@@ -15,7 +15,8 @@ void listar(No* lista);
 void edit(int numero, No **lista);
 void erro_opcao();
 No* find(No* lista, int idzada);
-
+void remover(No** lista, int idzada);
+int quantidade_tarefas = 0;
 
 
 int main (){
@@ -155,7 +156,7 @@ void nova_tarefa(No** lista, int* contador_id){
     (*contador_id)++; 
     
     getchar();
-    printf("Digite o Titulo:");
+    printf("Digite o Titulo: ");
         fgets(novo_no->info.titulo, sizeof(novo_no->info.titulo), stdin);
     
     
@@ -176,6 +177,7 @@ void nova_tarefa(No** lista, int* contador_id){
     *lista = novo_no;
 
     printf("\n>> Tarefa criada com sucesso! (ID: %d)\n", novo_no->info.id);
+    quantidade_tarefas++;
     esperar(2000);
 }
 
@@ -187,30 +189,10 @@ void edit(int numero, No** lista){
     limpar_tela();
     int x, id_aux;
     No *atual = *lista;
-    No *anterior = NULL;
-  
+    
     printf("Digite o ID do item que deseja alterar: ");
       scanf("%d", &id_aux);
-      //validar se o id existe
 
-        atual = *lista;
-
-        //na remoção a gente precisar achar o anterior
-        if(numero == 4){
-            while ( atual != NULL && atual->info.id != id_aux){
-                anterior = atual->prox;
-            }
-        }else { 
-            //so o caso 4 precisa ser difente, os outros podemos usar o find
-            atual = find(*lista, id_aux);
-        }
-
-        if(atual == NULL){
-            printf("ERRO: ID nao encontrado:\n");
-            limpar_buffer();
-            esperar(1500);
-            return;
-        }
     printf("=============================================================\n");
 
     switch(numero){
@@ -253,14 +235,10 @@ void edit(int numero, No** lista){
             scanf("%d", &atual->info.prazo.ano);
             break;
         case 4: 
-            while (atual != NULL && atual->info.id != id_aux) {
-                anterior = atual;
-                atual = atual->prox;
-            }   
-            printf("Item removido com sucesso");
+            remover(lista, id_aux);
+            printf("Item removido com sucesso.");
                 esperar(1500);
-            //variavel do nó = NULL;
-            break;
+            return;
 
     }
 }
@@ -287,3 +265,31 @@ No* find(No* lista, int idzada){
 
     return atual;
 }   
+
+void remover(No **lista, int idzada){
+    No *anterior, *proximo;
+    anterior = NULL;
+    proximo = *lista;
+
+    if(proximo == NULL){
+        printf("ERRO! LISTA VAZIA.");
+        return;
+    }
+    if(proximo->info.id == idzada){
+        *lista = proximo->prox;
+        free(proximo);
+        return;
+    }
+
+    while((proximo != NULL) && (proximo->info.id != idzada)){
+        anterior = proximo;
+        proximo = proximo->prox;
+    }
+    
+    if(proximo != NULL){
+        anterior->prox = proximo->prox;
+        free(proximo);
+    }else{
+        erro_opcao();
+    }
+}
