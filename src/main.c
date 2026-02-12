@@ -173,7 +173,7 @@ void nova_tarefa(No** lista, int* contador_id){
 
     //o "prox" aponta para onde a lista original apontava
     novo_no->prox = *lista;
-    //a lista aponta para o novo no que ciramos
+    //a lista aponta para o novo no que criamos.
     *lista = novo_no;
 
     printf("\n>> Tarefa criada com sucesso! (ID: %d)\n", novo_no->info.id);
