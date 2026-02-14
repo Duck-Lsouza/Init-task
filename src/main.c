@@ -16,14 +16,15 @@ void edit(int numero, No **lista);
 void erro_opcao();
 No* find(No* lista, int idzada);
 void remover(No** lista, int idzada);
+void salvar(No **lista);
+No *pull(int *prox_id);
 int quantidade_tarefas = 0;
 
 
 int main (){
-    
     int prox_id = 1;
-
     No* lista = NULL;
+    lista = pull(&prox_id);
 
     menu_ini(&lista, &prox_id);
     limpar_tela();
@@ -43,9 +44,9 @@ void menu_ini(No** lista, int* prox_id){
         printf("\n\tMENU PRINCIPAL (INIT-TASK)\n\n");
         printf("==============================================\n");
         printf("(1) Criar uma tarefa.\n");
-        printf("(2) Editar tarefas existentes\n");
-        printf("(3) Listar todas as tarefas\n");
-        printf("(4) Exit\n");
+        printf("(2) Editar tarefas existentes.\n");
+        printf("(3) Listar todas as tarefas.\n");
+        printf("(4) Sair e salvar.\n");
             scanf("%d", &opcao);  
 
             if(opcao < 1 || opcao > 4) {
@@ -71,7 +72,7 @@ void menu_ini(No** lista, int* prox_id){
             break;
         
         case 4:
-            //muy triste com sua saida
+            salvar(lista);
             break;
     }
 
@@ -151,7 +152,6 @@ void nova_tarefa(No** lista, int* contador_id){
     printf("=== Criando nova tarefa ===\n");
 
     No* novo_no = (No*) malloc(sizeof(No));
-    
     novo_no->info.id = (*contador_id);
     (*contador_id)++; 
     
@@ -292,4 +292,61 @@ void remover(No **lista, int idzada){
     }else{
         erro_opcao();
     }
+}
+
+void salvar(No **lista){
+    FILE *fp = fopen("save.bin", "wb");
+    No *salvar = *lista;
+
+
+    if(fp == NULL){
+        printf("ERRO! IMPOSSÍVEL SALVAR.\n");
+        getchar();
+        return;
+     }
+
+    while (salvar != NULL){
+        fwrite(&salvar->info, sizeof(salvar->info), 1, fp);
+        salvar = salvar->prox;
+    }
+
+    fclose(fp);
+}
+
+No *pull(int *prox_id){
+    FILE *fp = fopen("save.bin", "rb");
+    No *puxar_ini = NULL;
+    No *puxar_at = NULL;
+    Tarefa temp;
+
+   
+    if(fp == NULL){
+        return NULL;
+
+    }else{
+        while (fread(&temp, sizeof(temp), 1, fp) == 1){
+
+            No *new= (No*)malloc(sizeof(No));
+            new->info = temp;
+            new->prox = NULL;
+
+            if(puxar_ini == NULL){
+
+                puxar_ini = new;
+                puxar_at = puxar_ini;
+
+            }else{
+
+                puxar_at->prox = new;
+                puxar_at = puxar_at->prox; 
+
+            }
+            if(puxar_at->info.id >= *prox_id){
+                *prox_id = puxar_at->info.id + 1;
+            }
+        }
+    }
+    fclose(fp);
+
+    return puxar_ini;
 }
