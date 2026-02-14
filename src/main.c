@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-
+#include <locale.h>
 
 #include "portabilidade.h"
 #include "tarefas.h"
@@ -16,8 +16,9 @@ void edit(int numero, No **lista);
 void erro_opcao();
 No* find(No* lista, int idzada);
 void remover(No** lista, int idzada);
-void salvar(No **lista);
+void salvar(No *lista);
 No *pull(int *prox_id);
+int find_id(No **lista, int idzin);
 int quantidade_tarefas = 0;
 
 
@@ -25,6 +26,7 @@ int main (){
     int prox_id = 1;
     No* lista = NULL;
     lista = pull(&prox_id);
+    setlocale(LC_ALL, "Portuguese");
 
     menu_ini(&lista, &prox_id);
     limpar_tela();
@@ -40,16 +42,17 @@ void menu_ini(No** lista, int* prox_id){
     
     while(opcao != 4){
         limpar_tela();
-        printf("==============================================\n");
-        printf("\n\tMENU PRINCIPAL (INIT-TASK)\n\n");
-        printf("==============================================\n");
+        printf("================================================================\n");
+        printf("\n\t\tMENU PRINCIPAL (INIT-TASK)\n\n");
+        printf("================================================================\n\n");
         printf("(1) Criar uma tarefa.\n");
         printf("(2) Editar tarefas existentes.\n");
         printf("(3) Listar todas as tarefas.\n");
         printf("(4) Sair e salvar.\n");
-            scanf("%d", &opcao);  
-
-            if(opcao < 1 || opcao > 4) {
+        printf("\nDigite a opção: ");
+            if(scanf("%d", &opcao) == 0){
+                erro_opcao();
+            }else if(opcao < 1 || opcao > 4) {
             erro_opcao();
         }
 
@@ -72,7 +75,7 @@ void menu_ini(No** lista, int* prox_id){
             break;
         
         case 4:
-            salvar(lista);
+            salvar(*lista);
             break;
     }
 
@@ -86,10 +89,10 @@ void listar(No* lista){
     /*a função não altera onde a lista começa, so percorre por isso 
     passamos uma copia do ponteiro(passagem por valor)
 */ 
-    printf("=== LISTA DE TAREFAS ===\n\n");
+    printf("\t\t=== LISTA DE TAREFAS ===\n\n");
 
     if(lista == NULL){
-        printf("Nenhuma tarefa encontrada\n");
+        printf("Nenhuma tarefa encontrada.\n");
     } else {
         
         // ponteiro auxiliar apontado para o inicio da lista 
@@ -127,15 +130,16 @@ void menu_edit(No** lista){ //menu para selecionar o que deseja editar
     while (opcao != 5){
         limpar_tela();
         printf("==============================================\n");
-        printf("\n\tSELECIONE O QUE DESEJA FAZER:\n\n");
-        printf("==============================================\n");
         printf("(1) Para mudar a prioridade.\n");
         printf("(2) Para marcar como concluido.\n");
         printf("(3) Para mudar o prazo.\n");
         printf("(4) Para excluir tarefas.\n");
         printf("(5) Para voltar.\n");
-            scanf("%d", &opcao);
-            if(opcao < 1 || opcao > 5) {
+        printf("==============================================\n");
+        printf("Selecione o que deseja alterar: ");
+            if(scanf("%d", &opcao) == 0){
+                erro_opcao();
+            }else if(opcao < 1 || opcao > 5) {
                 erro_opcao();
         
             }else if(opcao != 5){
@@ -152,6 +156,10 @@ void nova_tarefa(No** lista, int* contador_id){
     printf("=== Criando nova tarefa ===\n");
 
     No* novo_no = (No*) malloc(sizeof(No));
+    if(novo_no == NULL){
+        printf("Erro ao alocar a memória.\n");
+        return;
+    }
     novo_no->info.id = (*contador_id);
     (*contador_id)++; 
     
@@ -162,7 +170,20 @@ void nova_tarefa(No** lista, int* contador_id){
     
     
     printf("Digite a prioridade: \n(1) Urgente.\n(2) Importante.\n(3) Intermediário.\n(4) Não importante.\n");
-        scanf("%d", &novo_no->info.prioridade);
+        if(scanf("%d", &novo_no->info.prioridade) == 0){
+            erro_opcao();
+            free(novo_no);
+            return;
+        }else {
+
+        
+            while (novo_no->info.prioridade < 1 || novo_no->info.prioridade > 4){
+            erro_opcao();
+            printf("Essa prioridade não existe. Por favor digite uma das 4 prioridades.\n");
+            getchar();
+            return;
+        }
+        }
 
 
     //valores padroes, apenas testes felas
@@ -191,8 +212,16 @@ void edit(int numero, No** lista){
     No *atual = *lista;
     
     printf("Digite o ID do item que deseja alterar: ");
-      scanf("%d", &id_aux);
+    while(scanf("%d", &id_aux) == 0){
 
+        erro_opcao();
+        return;
+      }
+    if(find_id(lista, id_aux) == 1){
+        printf("ID Não encontrado.\nPor favor digite um ID válido.\n");
+        esperar(1000);
+        return;
+    }
     printf("=============================================================\n");
 
     switch(numero){
@@ -203,9 +232,13 @@ void edit(int numero, No** lista){
             printf("(2) Importante.\n");
             printf("(3) Intermediário.\n");
             printf("(4) Não importante.\n");
-                scanf("%d", &x);
-               if(x < 1 || x> 4){
-                erro_opcao();
+                if(scanf("%d", &x) == 0){
+                    erro_opcao();
+                    break;
+                }else if(x < 1 || x> 4){
+                    erro_opcao();
+                    printf("Essa prioridade não existe. Por favor digite uma das 4 prioridades.\n");
+                    getchar();
                 break;
                 
                }
@@ -236,8 +269,6 @@ void edit(int numero, No** lista){
             break;
         case 4: 
             remover(lista, id_aux);
-            printf("Item removido com sucesso.");
-                esperar(1500);
             return;
 
     }
@@ -246,21 +277,27 @@ void erro_opcao(){ //Função para usar para indicar que nenhuma opção foi sel
 
     limpar_tela();
 
-    printf("ERRO! Nenhuma opção foi selecionada.\n");
+    printf("ERRO! Entrada inválida.\n");
         esperar(1000);
 
     printf("Reiniciando...\n");
         esperar(1000);
-        getchar();
+        limpar_buffer();
     limpar_tela();
-    }
+    
+}
 
 No* find(No* lista, int idzada){
     No* atual = lista;
     int id_aux = idzada;
 
-     while (atual != NULL && atual->info.id != id_aux){
+    while (atual != NULL && atual->info.id != id_aux){
             atual = atual->prox;
+    }
+    if(atual == NULL){
+        printf("ID não encontrado.\n");
+        getchar();
+        return NULL;
     }
 
     return atual;
@@ -292,11 +329,13 @@ void remover(No **lista, int idzada){
     }else{
         erro_opcao();
     }
+    printf("Item removido com sucesso.");
+        esperar(1500);
 }
 
-void salvar(No **lista){
+void salvar(No *lista){
     FILE *fp = fopen("save.bin", "wb");
-    No *salvar = *lista;
+    No *salvar = lista;
 
 
     if(fp == NULL){
@@ -311,6 +350,11 @@ void salvar(No **lista){
     }
 
     fclose(fp);
+    while(lista != NULL){
+        salvar = lista;
+        lista = lista->prox;
+        free(salvar);
+    }
 }
 
 No *pull(int *prox_id){
@@ -349,4 +393,19 @@ No *pull(int *prox_id){
     fclose(fp);
 
     return puxar_ini;
+}
+int find_id(No **lista, int idzin){
+    No* atual = lista;
+    int id_aux = idzin;
+
+    while (atual != NULL && atual->info.id != id_aux){
+            atual = atual->prox;
+    }
+    if(atual == NULL){
+        printf("ID não encontrado.\n");
+        getchar();
+        return NULL;
+    }
+
+    return atual;
 }
