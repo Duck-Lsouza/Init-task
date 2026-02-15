@@ -51,6 +51,7 @@ void menu_ini(No** lista, int* prox_id){
         printf("\nDigite a opção: ");
             if(scanf("%d", &opcao) == 0){
                 erro_opcao();
+                
             }else if(opcao < 1 || opcao > 4) {
             erro_opcao();
         }
@@ -116,6 +117,7 @@ void nova_tarefa(No** lista, int* contador_id){
             erro_opcao();
             printf(RED "Essa prioridade não existe."RESET "\nPor favor digite uma das 4 prioridades.\n");
             getchar();
+            free(novo_no);
             return;
         }
         }
@@ -219,7 +221,8 @@ void edit(int numero, No** lista){
             break;
         case 3: 
             remover(lista, id_aux);
-            break;;
+            limpar_buffer();
+            break;
 
     }
 }
@@ -325,10 +328,12 @@ void remover(No **lista, int idzada){
             free(proximo);
         }else{
             erro_opcao();
+            return;
         }
     }
-    printf(GREEN"\n>> Item removido com sucesso." RESET);
+    printf(GREEN"\n>> Item removido com sucesso." RESET "\n");
         esperar(1500);
+    
 }
 
 void salvar(No *lista){
