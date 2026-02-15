@@ -10,7 +10,10 @@ windows e a unistd */
     // para o windows
 
     #include <windows.h>
-
+   static void inicializar_terminal() { //Função para arrumar a acentuação do terminal
+        system("chcp 65001 > nul");
+        SetConsoleOutputCP(CP_UTF8);
+    }
     static void limpar_tela() { 
         system("cls"); 
     }
