@@ -51,7 +51,7 @@ gcc main.c -o ToDoList
 
 Este projeto foi desenvolvido por:
 
-* **Lúcio Vagner Carvalho Souza**
+* **[Lúcio Vagner Carvalho Souza](https://github.com/Duck-Lsouza)**
 * **[Carlos Henrique Leite Bianchin](https://github.com/henrique-bianchin)**
 
 ---
