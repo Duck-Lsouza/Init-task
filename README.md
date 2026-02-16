@@ -1,67 +1,67 @@
-```markdown
-# 📝 Init-task | CLI Task Manager
+📝 Init-task | CLI Task Manager
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Language-C-00599C?style=for-the-badge&logo=c&logoColor=white" />
-  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-000000?style=for-the-badge&logo=linux&logoColor=white" />
-  <img src="https://img.shields.io/badge/UFPel-Computer%20Engineering-FFD700?style=for-the-badge" />
+<img src="https://img.shields.io/badge/Language-C-00599C?style=for-the-badge&logo=c&logoColor=white" />
+<img src="https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-000000?style=for-the-badge&logo=linux&logoColor=white" />
+<img src="https://img.shields.io/badge/UFPel-Computer%20Engineering-FFD700?style=for-the-badge" />
 </p>
 
-> *Projeto desenvolvido para a disciplina de Programação de Computadores da Universidade Federal de Pelotas (UFPel).*
+    Projeto desenvolvido para a disciplina de Programação de Computadores da Universidade Federal de Pelotas (UFPel).
 
-O **Init-task** é uma aplicação de lista de tarefas (To-Do List) via linha de comando (CLI),
-desenvolvida em linguagem C. O projeto foi construido com foco em **portabilidade**,
-**gestão eficiente de memória** e **persistência de dados**. 
+O Init-task é um gerenciador de tarefas leve e eficiente que roda diretamente no seu terminal. Construído em C, o projeto foca no uso prático de alocação dinâmica de memória e manipulação de arquivos binários, oferecendo uma experiência robusta e multiplataforma.
+🚀 Funcionalidades
 
-## 🚀 Funcionalidades
+    Gerenciamento CRUD: Controle total sobre suas tarefas (Criar, Ler, Atualizar e Deletar).
 
-* **Gerenciamento Completo (CRUD):** Permite criar, listar, editar (status/prioridade) e remover tarefas.
-* **Persistência de Dados:** Utiliza arquivos binários (`save.bin`) para salvar e carregar as tarefas automaticamente, garantindo que os dados não sejam perdidos ao fechar o programa.
-* **Priorização:** Sistema de classificação de tarefas: *Urgente*, *Importante*, *Intermediário* e *Não importante*.
-* **Multiplataforma:** Código preparado para rodar nativamente em **Windows** e **Linux**, com funções adaptadas para cada sistema operacional (limpeza de tela, `sleep`, acentuação).
-* **Interface Visual:** Uso de cores ANSI no terminal para melhorar a legibilidade e ícone personalizado no executável (Windows).
+    Persistência Automática: Seus dados são salvos em save.bin e recarregados sempre que você inicia o programa.
 
-## 🛠️ Tecnologias e Conceitos
+    Níveis de Prioridade: Classificação visual para focar no que importa:
 
-* **Linguagem C**: Padrão ANSI/ISO.
-* **Estruturas de Dados**: Lista Simplesmente Encadeada para armazenamento dinâmico (`malloc`/`free`).
-* **File I/O**: Manipulação de arquivos binários (`fread`, `fwrite`).
-* **Modularização**: Código organizado em arquivos de cabeçalho (`.h`) para melhor manutenção.
+        🔴 Urgente | 🟠 Importante | 🟡 Intermediário | 🟢 Não importante.
 
-## 📦 Como Compilar e Rodar
+    Core Multiplataforma: Suporte total para Windows e Linux, com tratamento nativo de cores ANSI, limpeza de tela e encoding de caracteres.
 
-Para rodar o projeto, você precisará de um compilador C (como o GCC).
+    Interface Intuitiva: Menus coloridos para facilitar a navegação via CLI.
 
-### Windows
-Para incluir o ícone personalizado e garantir a execução correta, compile linkando o arquivo de recursos:
+🛠️ Tecnologias e Conceitos Aplicados
 
-```bash
-gcc main.c recursos.o -o ToDoList.exe
-./ToDoList.exe
+O projeto utiliza conceitos fundamentais de Ciência da Computação:
 
-```
+    Estruturas de Dados: Implementação de Lista Simplesmente Encadeada para gerenciamento dinâmico em tempo de execução.
 
-### Linux
+    Gestão de Memória: Uso rigoroso de malloc e free para evitar memory leaks.
 
-No Linux, a compilação é direta:
+    Persistência: Manipulação de arquivos em modo binário (fread/fwrite) para maior performance e integridade.
 
-```bash
-gcc main.c -o ToDoList
-./ToDoList
+    Modularização: Divisão lógica do código em módulos (.h e .c) para facilitar a manutenção.
 
-```
+📂 Estrutura do Projeto
+Plaintext
 
-## 👥 Autores
+├── src/
+│   ├── main.c          # Ponto de entrada e loop principal
+│   ├── tarefas.c       # Lógica das funcionalidades (CRUD)
+│   ├── tarefas.h       # Protótipos e structs
+│   └── util.c          # Funções auxiliares (UI/Sistema)
+├── resources/
+│   └── recursos.o      # Ícone e recursos (Windows)
+└── save.bin            # Arquivo de persistência (gerado após uso)
 
-Este projeto foi desenvolvido por:
+📦 Como Compilar e Rodar
 
-* **[Lúcio Vagner Carvalho Souza](https://github.com/Duck-Lsouza)**
-* **[Carlos Henrique Leite Bianchin](https://github.com/henrique-bianchin)**
+Certifique-se de ter o GCC (ou outro compilador C) instalado.
+🐧 Linux
 
----
+No terminal, utilize o comando:
+Bash
 
-Desenvolvido com 💙 e C na UFPel.
+gcc src/*.c -o init-task
+./init-task
 
-```
+🪟 Windows
 
-```
+Para incluir o ícone personalizado, compile linkando o arquivo de recursos:
+Bash
+
+gcc src/*.c resources/recursos.o -o InitTask.exe
+./InitTask.exe
