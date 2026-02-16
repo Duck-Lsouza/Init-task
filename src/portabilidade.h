@@ -25,7 +25,9 @@ windows e a unistd */
 
 #else
     //para o linux
-
+    static void inicializar_terminal() { //Função para arrumar a acentuação do terminal
+        
+    }
     #include <unistd.h> 
 
     static void limpar_tela() { 
