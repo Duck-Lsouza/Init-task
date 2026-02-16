@@ -1,5 +1,11 @@
 ```markdown
-# Init-task: Sistema de Gerenciamento de Tarefas 📝
+# 📝 Init-task | CLI Task Manager
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Language-C-00599C?style=for-the-badge&logo=c&logoColor=white" />
+  <img src="https://img.shields.io/badge/Platform-Linux%20%7C%20Windows-000000?style=for-the-badge&logo=linux&logoColor=white" />
+  <img src="https://img.shields.io/badge/UFPel-Computer%20Engineering-FFD700?style=for-the-badge" />
+</p>
 
 > *Projeto desenvolvido para a disciplina de Programação de Computadores da Universidade Federal de Pelotas (UFPel).*
 
