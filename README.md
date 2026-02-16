@@ -5,6 +5,8 @@
 
 O **Init-task** é uma aplicação de lista de tarefas (To-Do List) via linha de comando (CLI), desenvolvida inteiramente em linguagem C. O projeto foi construído com foco em **portabilidade**, **gestão eficiente de memória** e **persistência de dados**.
 
+
+
 ## 🚀 Funcionalidades
 
 * **Gerenciamento Completo (CRUD):** Permite criar, listar, editar (status/prioridade) e remover tarefas.
