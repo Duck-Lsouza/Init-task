@@ -1,7 +1,3 @@
-Aqui está a versão final do **README.md**, atualizada com o link do GitHub do seu colega.
-
-É só copiar o bloco de código abaixo e colar no seu arquivo `README.md`:
-
 ```markdown
 # Init-task: Sistema de Gerenciamento de Tarefas 📝
 
