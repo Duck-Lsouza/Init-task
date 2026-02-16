@@ -1,22 +1,30 @@
-# Init-task 🚀
+# Init-task: CLI To-Do List em C 📝
 
-> Um gerenciador de tarefas CLI (Command Line Interface) desenvolvido em C.
+> *Projeto desenvolvido para a disciplina de Programação de Computadores da UFPel.*
 
-![Language](https://img.shields.io/badge/language-C-blue)
-![Status](https://img.shields.io/badge/status-In%20Development-yellow)
-![License](https://img.shields.io/badge/license-MIT-green)
+O **Init-task** é um gerenciador de tarefas via linha de comando (CLI) desenvolvido em C. O projeto aplica conceitos fundamentais de estrutura de dados e engenharia de software para criar uma aplicação leve, persistente e multiplataforma.
 
-## 💡 Sobre o Nome
-O nome **Init-task** é uma alusão ao processo **init** (PID 1) de sistemas Unix-like. Assim como o *init* é o pai de todos os processos e responsável por manter o sistema a rodar, este software foi desenhado para ser o ponto de partida da organização pessoal do utilizador.
+## 🚀 Funcionalidades
 
-## 📋 Funcionalidades (Planeadas)
-O projeto visa atender aos requisitos da disciplina de Programação de Computadores da UFPel, implementando:
-- [ ] Listas Encadeadas para gestão dinâmica de memória.
-- [ ] Persistência de dados em arquivos.
-- [ ] Manipulação de Structs e Vetores.
-- [ ] Interface via terminal (CLI).
+* **CRUD de Tarefas:** Criação, leitura, edição (prioridade/status) e remoção de tarefas.
+* **Persistência de Dados:** Utiliza manipulação de arquivos binários (`save.bin`) para carregar e salvar as tarefas automaticamente.
+* **Priorização:** Sistema de classificação (Urgente, Importante, Intermediário, Não importante).
+* **Multiplataforma:** Código modular com diretivas de pré-compilação para rodar nativamente em **Windows** e **Linux**.
+* **UX Aprimorada:** Interface colorida no terminal e tratamento de acentuação (UTF-8).
 
-## 🛠️ Como Compilar
+## 🛠️ Tecnologias e Conceitos
+
+* **Linguagem C**: Padrão ANSI/ISO.
+* **Estruturas de Dados**: Lista Simplesmente Encadeada para gerenciamento dinâmico de memória (`malloc`/`free`).
+* **Modularização**: Separação lógica em headers:
+    * `main.c`: Lógica principal e menus.
+    * `tarefas.h`: Definições de `structs` e constantes.
+    * `portabilidade.h`: Abstração de funções de sistema (`system`, `sleep`) para compatibilidade entre OS.
+
+## 📦 Como Compilar e Rodar
+
+### Windows
+Para incluir o ícone personalizado, você deve linkar o objeto de recursos:
 ```bash
-gcc src/main.c -o init-task
-./init-task
+gcc main.c recursos.o -o ToDoList.exe
+./ToDoList.exe
