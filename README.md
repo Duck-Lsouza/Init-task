@@ -3,9 +3,7 @@
 
 > *Projeto desenvolvido para a disciplina de Programação de Computadores da Universidade Federal de Pelotas (UFPel).*
 
-O **Init-task** é uma aplicação de lista de tarefas (To-Do List) via linha de comando (CLI), desenvolvida inteiramente em linguagem C. O projeto foi construído com foco em **portabilidade**, **gestão eficiente de memória** e **persistência de dados**.
-
-
+O **Init-task** é uma aplicação de lista de tarefas (To-Do List) via linha de comando (CLI), desenvolvida em linguagem C. O projeto foi construido com foco em **portabilidade**, **gestão eficiente de memória** e **persistência de dados**. 
 
 ## 🚀 Funcionalidades
 
