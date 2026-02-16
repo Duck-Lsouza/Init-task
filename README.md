@@ -18,5 +18,7 @@ O projeto visa atender aos requisitos da disciplina de Programação de Computad
 
 ## 🛠️ Como Compilar
 ```bash
-gcc src/main.c -o init-task
-./init-task
+gcc src/main.c src/recursos.o -o ToDoList.exe
+./ToDoList.exe
+
+OU ABRIR EXECUTAVEL
